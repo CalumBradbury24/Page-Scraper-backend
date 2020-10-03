@@ -2,17 +2,14 @@ var express = require("express");
 var router = new express.Router();
 
 const {
-  getPremierLeagueTable,
+  getTables,
   getPremierLeagueFixtures,
-  getChampionshipTable,
-  getLeagueOneTable,
-  getLeagueTwoTable
 } = require("../Utils/scraper");
 
 router.get("/premierleague", (req, res) => {
-  getPremierLeagueTable("https://www.premierleague.com/tables", (err, arr) => {
+  getTables("https://www.theguardian.com/football/premierleague/table", (err, arr) => {
     if (err) {
-      res.send("error");
+      res.status(404).send("error");
       return;
     }
     res.send(arr);
@@ -20,11 +17,11 @@ router.get("/premierleague", (req, res) => {
 });
 
 router.get("/championship", (req, res) => {
-  getChampionshipTable(
+  getTables(
     "https://www.theguardian.com/football/championship/table",
     (err, arr) => {
       if (err) {
-        res.send("error");
+        res.status(404).send("error");
         return;
       }
       res.send(arr);
@@ -33,11 +30,11 @@ router.get("/championship", (req, res) => {
 });
 
 router.get("/leagueOne", (req, res) => {
-  getLeagueOneTable(
+  getTables(
     "https://www.theguardian.com/football/leagueonefootball/table",
     (err, arr) => {
       if (err) {
-        res.send("error");
+        res.status(404).send("error");
         return;
       }
       res.send(arr);
@@ -46,11 +43,11 @@ router.get("/leagueOne", (req, res) => {
 });
 
 router.get("/leagueTwo", (req, res) => {
-  getLeagueTwoTable(
+  getTables(
     "https://www.theguardian.com/football/leaguetwofootball/table",
     (err, arr) => {
       if (err) {
-        res.send("error");
+        res.status(404).send("error");
         return;
       }
       res.send(arr);

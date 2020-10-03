@@ -1,41 +1,10 @@
 const cheerio = require("cheerio"); //JQuery implementation for parsing HTML
 const axios = require("axios");
-const { Checks, Clean, cleanTeams } = require("./utils");
+const { Clean, cleanTeams } = require("./utils");
 
-const getPremierLeagueTable = async (url, callback) => {
-  const premierLeague = []; //Prem league table
-  await axios //wait for get request to complete before continuing
-    .get(url)
-    .then((response) => {
-      const html = response.data;
-      const $ = cheerio.load(html);
-      const premTable = $(".tableBodyContainer > tr"); //trs in tableBodyContainer class
-
-      //iterate over html
-      premTable.each(function () {
-        const position = $(this).find(".value").text();
-        const teamName = $(this).find(".long").text();
-        const teamBadge = $(this).find(".badge-image").attr("src"); //Select the src attribute
-        const points = $(this).find(".points").text();
-
-        if (Checks(position, premierLeague)) {
-          premierLeague.push({
-            position,
-            teamName,
-            teamBadge,
-            points,
-          });
-        }
-        
-      });
-    })
-    .catch((error) => console.log(error));
-
-  callback(null, premierLeague); //Callback function
-};
-
-const getChampionshipTable = async (url, callback) => {
-  const champTable = [];
+//Championship, league 1, league 2 tables
+const getTables = async (url, callback) => {
+  const Table = [];
   await axios
     .get(url)
     .then((response) => {
@@ -49,61 +18,11 @@ const getChampionshipTable = async (url, callback) => {
         let teamBadge = $(this).find(".team-crest").attr("src"); //Select the src attribute
         let points = $(this).find("b").text();
 
-        champTable.push({ position, team, teamBadge, points });
+        Table.push({ position, team, teamBadge, points });
       });
     })
     .catch((error) => console.log(error));
-  callback(null, champTable); //Callback function
-};
-
-const getLeagueOneTable = async (url, callback) => {
-  const leagueOneTable = [];
- await axios
-    .get(url)
-    .then((response) => {
-      const html = response.data;
-      const $ = cheerio.load(html);
-      const result = $("tbody > tr");
-    
-      result.each(function () {
-        let position = $(this).find(".table-column--sub").text();
-        let team = cleanTeams($(this).find("a").text());
-        let teamBadge = $(this).find(".team-crest").attr("src"); //Select the src attribute
-        let points = $(this).find("b").text();
-       
-        leagueOneTable.push({ position, team, teamBadge, points });
-        
-      });
-    
-    })
-  
-    .catch((error) => console.log(error));
-    callback(null, leagueOneTable); //Callback function
-};
-
-const getLeagueTwoTable = async (url, callback) => {
-  const leagueTwoTable = [];
- await axios
-    .get(url)
-    .then((response) => {
-      const html = response.data;
-      const $ = cheerio.load(html);
-      const result = $("tbody > tr");
-    
-      result.each(function () {
-        let position = $(this).find(".table-column--sub").text();
-        let team = cleanTeams($(this).find("a").text());
-        let teamBadge = $(this).find(".team-crest").attr("src"); //Select the src attribute
-        let points = $(this).find("b").text();
-        
-        leagueTwoTable.push({ position, team, teamBadge, points });
-        
-      });
-    
-    })
-  
-    .catch((error) => console.log(error));
-    callback(null, leagueTwoTable); //Callback function
+  callback(null, Table); //Callback function
 };
 
 const getPremierLeagueFixtures = async (url, callback) => {
@@ -132,35 +51,32 @@ const getPremierLeagueFixtures = async (url, callback) => {
 
 /*
 const getChampionshipFixtures = () => {
-  const PremfixtureHistory = []; //prem fixture results
+  const Fixtures = []; //prem fixture results
   axios
-    .get(url)
+    .get('https://www.theguardian.com/football/championship/fixtures')
     .then((response) => {
       const html = response.data;
       const $ = cheerio.load(html);
-      const result = $(".table-grouping > table"); //Table scraped
+      const result = $("tbody > tr"); //Table scraped
 
       result.each(function () {
-        const date = $(this).find("th").text();
-        const Teams = $(this).find("a").text();
-        let upcomingFixtures = Clean(Teams);
+        let time = $(this).find("time").attr("datetime"); //Select the src attribute
+        let Team1 = $(this).find(".team-name__long").text();
+       // let upcomingFixtures = Clean(Teams);
 
-        PremfixtureHistory.push({ date, upcomingFixtures });
+        Fixtures.push({ time, Team1 });
       });
 
-      //console.log(fixtureHistory[1].cleanedTeams[3]);
+      console.log(Fixtures);
     })
     .catch((error) => console.log(error));
-  callback(null, PremfixtureHistory); //Callback function
+ // callback(null, PremfixtureHistory); //Callback function
 };
+
+getChampionshipFixtures();
 */
 
-
-
 module.exports = {
-  getPremierLeagueTable,
+  getTables,
   getPremierLeagueFixtures,
-  getChampionshipTable,
-  getLeagueOneTable,
-  getLeagueTwoTable
 };
