@@ -3,7 +3,7 @@ var router = new express.Router();
 
 const {
   getTables,
-  getPremierLeagueFixtures,
+  getFixtures
 } = require("../Utils/scraper");
 
 router.get("/premierleague", (req, res) => {
@@ -56,8 +56,47 @@ router.get("/leagueTwo", (req, res) => {
 })
 
 router.get("/premierleaguefixtures", (req, res) => {
-  getPremierLeagueFixtures(
+  getFixtures(
     "https://talksport.com/football/premier-league/fixtures/",
+    (err, arr) => {
+      if (err) {
+        res.send("error");
+        return;
+      }
+      res.send(arr);
+    }
+  );
+});
+
+router.get("/championshipfixtures", (req, res) => {
+  getFixtures(
+    "https://talksport.com/football/efl/championship/fixtures/",
+    (err, arr) => {
+      if (err) {
+        res.send("error");
+        return;
+      }
+      res.send(arr);
+    }
+  );
+});
+
+router.get("/leagueonefixtures", (req, res) => {
+  getFixtures(
+    "https://talksport.com/football/efl/league-one/fixtures/",
+    (err, arr) => {
+      if (err) {
+        res.send("error");
+        return;
+      }
+      res.send(arr);
+    }
+  );
+});
+
+router.get("/leaguetwofixtures", (req, res) => {
+  getFixtures(
+    "https://talksport.com/football/efl/league-two/fixtures/",
     (err, arr) => {
       if (err) {
         res.send("error");
