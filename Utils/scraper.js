@@ -24,7 +24,6 @@ const getTables = async (url, callback) => {
   callback(null, Table); //Callback function
 };
 
-
 const getFixtures = async (url, callback) => {
   const Fixtures = []; //fixture results
   await axios
@@ -36,20 +35,17 @@ const getFixtures = async (url, callback) => {
       let key = 0;
       result.map(function () {
         const date = $(this).find("th").text();
-        const Teams = $(this).find("a").text();  
+        const Teams = $(this).find("a").text();
         let upcomingFixtures = cleanFixtures(Teams);
         key++;
         Fixtures.push({ key, date, upcomingFixtures });
       });
 
-    //  console.log(Fixtures, Fixtures[0].upcomingFixtures);
+      //  console.log(Fixtures, Fixtures[0].upcomingFixtures);
     })
     .catch((error) => console.log(error));
   callback(null, Fixtures); //Callback function
 };
-
-
-
 
 module.exports = {
   getTables,

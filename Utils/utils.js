@@ -125,7 +125,6 @@ const returnModFixtureStrings = (newString) => {
   newString = newString.replace(/Preston North End/g, "Preston_North_End ");
   newString = newString.replace(/Stoke City/g, "Stoke_City ");
   newString = newString.replace(/Birmingham City/g, "Birmingham ");
-  newString = newString.replace(/Derby/g, "Derby ");
   newString = newString.replace(/Bournemouth/g, "Bournemouth ");
   newString = newString.replace(/Norwich City/g, "Norwich_City ");
   newString = newString.replace(/Blackburn Rovers/g, "Blackburn_Rovers ");
